@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,9 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.ads.MobileAds;
-import com.iamzhaoyuan.android.jokedisplay.JokeDisplayActivity;
-import com.iamzhaoyuan.android.jokedisplay.JokeDisplayFragment;
-import com.iamzhaoyuan.android.jokes.JokeFactory;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,13 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    
+
     public void tellJoke(View view) {
-        JokeFactory jokeFactory = new JokeFactory();
-        String joke = jokeFactory.getAJoke();
-        Intent intent = new Intent(this, JokeDisplayActivity.class);
-        intent.putExtra(JokeDisplayFragment.JOKE_KEY, joke);
-        startActivity(intent);
+        JokeMakerAsyncTask task = new JokeMakerAsyncTask();
+        task.execute(this);
     }
 
 }

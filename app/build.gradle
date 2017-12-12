@@ -21,17 +21,17 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.google.android.gms:play-services-ads:11.6.2'
     implementation 'com.android.support:support-v4:27.0.2'
-
     implementation 'com.jakewharton.timber:timber:4.6.0'
-
-    implementation project(':jokes')
     implementation project(':jokedisplay')
+    implementation project(path: ':backend', configuration: 'android-endpoints')
+
+    implementation files('/Users/yuan/Documents/Nanodegree/Android/BuildItBigger/backend/build/libs/backend-android-endpoints.jar')
+    implementation 'com.google.code.findbugs:jsr305:2.0.1'
 }
