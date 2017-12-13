@@ -14,22 +14,24 @@ import com.iamzhaoyuan.android.jokedisplay.JokeDisplayFragment;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
 public class JokeMakerAsyncTask extends AsyncTask<Context, Void, String> {
     private static MyApi myApiService = null;
-    private Context context;
+    private WeakReference<Context> context;
 
     @Override
     protected String doInBackground(Context... params) {
-        if (myApiService == null) {  // Only do this once
+        context = new WeakReference<>(params[0]);
+        String joke = null;
+
+        if (myApiService == null) {
+            String rootUrl = "http://" + context.get().getString(R.string.ip_address) + ":8080/_ah/api/";
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
-                    // options for running against local devappserver
-                    // - 10.0.2.2 is localhost's IP address in Android emulator
-                    // - turn off compression when running against local devappserver
-                    .setRootUrl("http://192.168.1.238:8080/_ah/api/")
+                    .setRootUrl(rootUrl)
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
                         public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
@@ -40,21 +42,20 @@ public class JokeMakerAsyncTask extends AsyncTask<Context, Void, String> {
             myApiService = builder.build();
         }
 
-        context = params[0];
 
-        String joke = null;
         try {
             joke = myApiService.tellJoke().execute().getData();
         } catch (IOException e) {
             Timber.d(e, "Sth wrong when getting a joke.");
         }
+
         return joke;
     }
 
     @Override
     protected void onPostExecute(String joke) {
-        Intent intent = new Intent(context, JokeDisplayActivity.class);
+        Intent intent = new Intent(context.get(), JokeDisplayActivity.class);
         intent.putExtra(JokeDisplayFragment.JOKE_KEY, joke);
-        context.startActivity(intent);
+        context.get().startActivity(intent);
     }
 }

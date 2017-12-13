@@ -42,9 +42,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        JokeMakerAsyncTask task = new JokeMakerAsyncTask();
-        task.execute(this);
-    }
-
 }
