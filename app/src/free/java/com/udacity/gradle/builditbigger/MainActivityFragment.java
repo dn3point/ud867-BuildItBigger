@@ -7,16 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.udacity.gradle.builditbigger.JokeMakerAsyncTask;
-import com.udacity.gradle.builditbigger.R;
+import com.google.android.gms.ads.InterstitialAd;
+
+import timber.log.Timber;
 
 public class MainActivityFragment extends Fragment implements View.OnClickListener {
 
-    private JokeMakerAsyncTask task;
+    private JokeMakerAsyncTask mJokeMakeTask;
+    private InterstitialAd mInterstitialAd;
+    private AdRequest mAdRequest;
 
-    public MainActivityFragment() {}
+    public MainActivityFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -24,10 +29,26 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
         AdView mAdView = root.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
+        mAdRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(mAdRequest);
+
+        if (getActivity() != null) {
+            mInterstitialAd = new InterstitialAd(getActivity());
+            mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+            mInterstitialAd.loadAd(mAdRequest);
+
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    mInterstitialAd.loadAd(mAdRequest);
+                    displayJoke();
+                }
+            });
+        } else {
+            Timber.d("getActivity() is null.");
+        }
 
         Button jokeButton = root.findViewById(R.id.btn_joke);
         jokeButton.setOnClickListener(this);
@@ -38,8 +59,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStop() {
         super.onStop();
-        if (task != null) {
-            task.cancel(false);
+        if (mJokeMakeTask != null) {
+            mJokeMakeTask.cancel(false);
         }
     }
 
@@ -47,11 +68,25 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_joke:
-                task = new JokeMakerAsyncTask();
-                task.execute((getContext()));
+                showInterstitialAd();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void displayJoke() {
+        mJokeMakeTask = new JokeMakerAsyncTask();
+        mJokeMakeTask.execute(getActivity());
+    }
+
+    private void showInterstitialAd() {
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Timber.d("The interstitial wasn't loaded yet.");
+            mInterstitialAd.loadAd(mAdRequest);
+            displayJoke();
         }
     }
 }
