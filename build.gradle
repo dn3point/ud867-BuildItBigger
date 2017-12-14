@@ -36,3 +36,46 @@ allprojects {
         google()
     }
 }
+
+task startLocalServer() {
+    group 'customize'
+    description 'Launch the local server.'
+
+    project(":backend").afterEvaluate { backend ->
+        backend.extensions.appengine.daemon = true
+    }
+
+    dependsOn ':backend:appengineRun'
+    doLast {
+        'Server started.'
+    }
+}
+
+task runConnectedTest() {
+    group 'customize'
+    description 'Run the test cases.'
+
+    dependsOn ':app:connectedCheck'
+    doLast {
+        'Finished all test cases. Please check reports.'
+    }
+    shouldRunAfter 'startLocalServer'
+}
+
+task stopLocalServer() {
+    group 'customize'
+    description 'Terminate the local server.'
+
+    dependsOn ':backend:appengineStop'
+    doLast {
+        println 'Server terminated.'
+    }
+    shouldRunAfter 'runConnectedTest'
+}
+
+task autoConnectedCheck () {
+    group 'customize'
+    description 'Run the test cases with launching and terminating the local server.'
+
+    dependsOn = ['startLocalServer', 'runConnectedTest', 'stopLocalServer']
+}
