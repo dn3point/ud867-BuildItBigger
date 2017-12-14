@@ -37,8 +37,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_joke:
-                task = new JokeMakerAsyncTask();
-                task.execute(getActivity());
+                task = new JokeMakerAsyncTask(getActivity(), getView());
+                task.execute();
                 break;
             default:
                 break;

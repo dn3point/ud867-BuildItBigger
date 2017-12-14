@@ -12,5 +12,7 @@ public class MainApp extends Application {
         if (com.iamzhaoyuan.android.jokedisplay.BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        // TODO Add release level log tree
     }
 }

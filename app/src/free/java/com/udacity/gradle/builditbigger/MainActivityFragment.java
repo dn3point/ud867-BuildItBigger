@@ -28,6 +28,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
+        // TODO Try to replace by Butter knife
         AdView mAdView = root.findViewById(R.id.adView);
         mAdRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
@@ -76,8 +77,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     }
 
     private void displayJoke() {
-        mJokeMakeTask = new JokeMakerAsyncTask();
-        mJokeMakeTask.execute(getActivity());
+        mJokeMakeTask = new JokeMakerAsyncTask(getActivity(), getView());
+        mJokeMakeTask.execute();
     }
 
     private void showInterstitialAd() {

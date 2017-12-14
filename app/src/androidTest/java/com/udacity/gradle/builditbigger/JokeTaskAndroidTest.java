@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.View;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,20 +26,27 @@ public class JokeTaskAndroidTest {
     private Context mMockContext;
 
     @Mock
-    private Resources mResources;
+    private Resources mMockResources;
+
+    @Mock
+    private View mMockView;
 
     @Before
     public void setup() {
-        when(mMockContext.getResources()).thenReturn(mResources);
-        when(mResources.getString(R.string.ip_address)).thenReturn(IP_ADDRESS);
+        when(mMockContext.getResources()).thenReturn(mMockResources);
+        when(mMockResources.getString(R.string.ip_address)).thenReturn(IP_ADDRESS);
     }
 
     @Test
     public void testJokeMakerTask() throws InterruptedException {
-        assertTrue(true);
         final CountDownLatch signal = new CountDownLatch(1);
 
-        JokeMakerAsyncTask testTask = new JokeMakerAsyncTask() {
+        JokeMakerAsyncTask testTask = new JokeMakerAsyncTask(mMockContext, mMockView) {
+            @Override
+            protected void onPreExecute() {
+                assertTrue(true);
+            }
+
             @Override
             protected void onPostExecute(String result) {
                 assertNotNull(result);
@@ -48,7 +56,7 @@ public class JokeTaskAndroidTest {
             }
         };
 
-        testTask.execute(mMockContext);
+        testTask.execute();
         signal.await();
     }
 }

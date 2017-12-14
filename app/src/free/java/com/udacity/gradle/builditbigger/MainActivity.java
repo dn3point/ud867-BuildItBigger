@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // TODO Try to move to the Fragment level
         MobileAds.initialize(this, getString(R.string.admob_app_id));
     }
 
