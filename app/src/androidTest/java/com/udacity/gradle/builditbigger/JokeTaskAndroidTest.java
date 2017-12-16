@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JokeTaskAndroidTest {
-    private static final String IP_ADDRESS = "10.63.0.113";
+    private static final String IP_ADDRESS = "#IP_ADDRESS";
     private static final String DEFAULT_JOKE = "This is a funny joke!";
 
     @Mock

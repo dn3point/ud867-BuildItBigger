@@ -31,6 +31,7 @@ public class JokeDisplayFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_joke_display, container, false);
+        // TODO Replace by Butter Knife
         mTextview = rootView.findViewById(R.id.joke_text_view);
         Intent intent = getActivity().getIntent();
         String joke = null;

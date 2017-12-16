@@ -47,9 +47,9 @@ dependencies {
     implementation 'com.android.support:support-v4:27.0.2'
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':jokedisplay')
     implementation project(path: ':backend', configuration: 'android-endpoints')
-
-    compileOnly files('../backend/build/libs/backend-android-endpoints.jar')
 }

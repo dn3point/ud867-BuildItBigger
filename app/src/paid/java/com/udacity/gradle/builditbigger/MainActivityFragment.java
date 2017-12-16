@@ -7,9 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivityFragment extends Fragment implements View.OnClickListener {
 
     private JokeMakerAsyncTask task;
+    @BindView(R.id.btn_joke) Button mJokeButton;
 
     public MainActivityFragment() {
     }
@@ -18,9 +22,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-
-        Button jokeButton = root.findViewById(R.id.btn_joke);
-        jokeButton.setOnClickListener(this);
+        ButterKnife.bind(this, root);
+        mJokeButton.setOnClickListener(this);
 
         return root;
     }

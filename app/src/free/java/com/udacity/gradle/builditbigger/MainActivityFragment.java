@@ -11,7 +11,10 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainActivityFragment extends Fragment implements View.OnClickListener {
@@ -19,6 +22,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     private JokeMakerAsyncTask mJokeMakeTask;
     private InterstitialAd mInterstitialAd;
     private AdRequest mAdRequest;
+    @BindView(R.id.adView) AdView mAdView;
+    @BindView(R.id.btn_joke) Button mJokeButton;
 
     public MainActivityFragment() {
     }
@@ -27,9 +32,8 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-
-        // TODO Try to replace by Butter knife
-        AdView mAdView = root.findViewById(R.id.adView);
+        ButterKnife.bind(this, root);
+        MobileAds.initialize(getActivity(), getString(R.string.admob_app_id));
         mAdRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
@@ -51,8 +55,7 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
             Timber.d("getActivity() is null.");
         }
 
-        Button jokeButton = root.findViewById(R.id.btn_joke);
-        jokeButton.setOnClickListener(this);
+        mJokeButton.setOnClickListener(this);
 
         return root;
     }

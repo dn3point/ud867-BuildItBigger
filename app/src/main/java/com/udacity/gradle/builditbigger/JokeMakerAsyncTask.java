@@ -18,12 +18,14 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class JokeMakerAsyncTask extends AsyncTask<Void, Void, String> {
     private static MyApi myApiService = null;
-    private ProgressBar mProgressBar;
-    private Button mButton;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+    @BindView(R.id.btn_joke) Button mButton;
 
     private Context mContext;
     private View mView;
@@ -35,8 +37,7 @@ public class JokeMakerAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
-        mButton = mView.findViewById(R.id.btn_joke);
-        mProgressBar = mView.findViewById(R.id.progress_bar);
+        ButterKnife.bind(this, mView);
 
         mButton.setClickable(false);
         mProgressBar.setVisibility(View.VISIBLE);
@@ -44,7 +45,6 @@ public class JokeMakerAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        // TODO null check for context
         String joke = null;
 
         if (myApiService == null) {
